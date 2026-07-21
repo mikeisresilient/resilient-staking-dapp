@@ -1,0 +1,134 @@
+.navbar-modern{
+    position: sticky;
+    top:0;
+    z-index:1000;
+
+    padding:16px 28px;
+
+    background:rgba(15,23,42,.72);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+
+.navbar-brand-modern{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:white !important;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+    text-decoration:none;
+}
+
+.navbar-brand-modern img{
+    transition:.3s;
+}
+
+.navbar-brand-modern:hover img{
+    transform:rotate(-8deg) scale(1.08);
+}
+
+.wallet-section{
+
+    margin-left:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.connection-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#22C55E;
+
+    font-weight:600;
+
+}
+
+.status-dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 12px #22C55E;
+
+}
+
+.wallet-pill{
+
+    padding:10px 18px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:white;
+
+    font-family:monospace;
+
+    transition:.3s;
+
+}
+
+.wallet-pill:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#3B82F6;
+
+    box-shadow:0 0 18px rgba(59,130,246,.3);
+
+}
+
+@media(max-width:768px){
+
+    .wallet-section{
+
+        gap:10px;
+
+        flex-direction:column;
+
+        align-items:flex-end;
+
+    }
+
+    .navbar-brand-modern{
+
+        font-size:1.1rem;
+
+    }
+
+    .wallet-pill{
+
+        font-size:.8rem;
+
+        padding:8px 12px;
+
+    }
+
+}

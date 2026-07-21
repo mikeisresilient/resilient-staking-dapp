@@ -1,0 +1,96 @@
+.card-modern{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.card-modern:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.stat-card{
+    padding:28px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.stat-icon{
+    font-size:2.2rem;
+    margin-bottom:18px;
+}
+
+.stat-title{
+    color:var(--text-muted);
+    font-size:.95rem;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    color:var(--text);
+    font-size:1.7rem;
+    font-weight:700;
+    line-height:1.2;
+    word-break:break-word;
+}
+
+.stat-subtitle{
+    margin-top:12px;
+    color:var(--success);
+    font-size:.9rem;
+}
+
+.portfolio-hero{
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #1D4ED8
+    );
+
+    border-radius:24px;
+
+    padding:40px;
+
+    margin-bottom:35px;
+
+    color:white;
+
+    box-shadow:0 20px 50px rgba(37,99,235,.25);
+
+}
+
+.hero-label{
+
+    opacity:.85;
+
+    margin-bottom:10px;
+
+}
+
+.hero-value{
+
+    font-size:3rem;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+.hero-description{
+
+    opacity:.9;
+
+}

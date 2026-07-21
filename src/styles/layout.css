@@ -1,0 +1,29 @@
+body{
+
+    background:linear-gradient(
+        180deg,
+        #0F172A,
+        #111827,
+        #020617
+    );
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        sans-serif;
+
+}
+
+.container{
+
+    max-width:1200px;
+
+}
+
+#content{
+
+    padding-bottom:60px;
+
+}
