@@ -1,97 +1,48 @@
-<div align="center">
-
 # 🚀 Resilient Staking DApp
 
-### A Modern DeFi Staking Platform Built with React, Solidity & Web3
-
+![Solidity](https://img.shields.io/badge/Solidity-0.8.0-363636?logo=solidity)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
-![Vite](https://img.shields.io/badge/Vite-Latest-646CFF?logo=vite)
-![Solidity](https://img.shields.io/badge/Solidity-0.8.x-363636?logo=solidity)
-![Truffle](https://img.shields.io/badge/Truffle-Framework-5E464D?logo=truffle)
-![Web3.js](https://img.shields.io/badge/Web3.js-Ethereum-F16822?logo=web3.js)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?logo=vite)
+![Web3.js](https://img.shields.io/badge/Web3.js-Blockchain-F16822?logo=web3.js)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
-</div>
+Resilient Staking DApp is a decentralized finance (DeFi) application that allows users to securely stake ERC20 tokens, earn blockchain based rewards, and manage their assets through MetaMask. The application supports both Ganache for local development and Ethereum Sepolia for public testnet deployment.
 
 ---
 
-A modern decentralized staking application built with **React**, **Vite**, **Solidity**, **Truffle**, **Web3.js**, and **MetaMask**.
+## Features
 
-Stake tokens, earn rewards, manage your assets, and interact securely with Ethereum smart contracts through an intuitive and responsive interface.
-
----
-
-## 🌐 Live Demo
-
-🚧 Deployment in progress.
-
-A live demo will be available soon via Vercel.
-
----
-
-## 📸 Project Preview
-
-### Dashboard
-
-![Dashboard](public/screenshots/fullOverview.jpeg)
+- ERC20 Token (Tether)
+- Reward Token (RWD)
+- Token Staking
+- Token Unstaking
+- MetaMask Integration
+- Multi Network Support
+- Responsive UI
+- Transaction Status Notifications
+- Loading Overlay
+- Glassmorphism UI
+- Ethereum Sepolia Deployment
+- Ganache Development Support
 
 ---
 
-### Loading Approval
-
-![Approval](public/screenshots/loadingApproval.png)
-
----
-
-### Staking Success
-
-![Success](public/screenshots/stakingSuccess.png)
-
----
-
-### Unstake Process
-
-![Unstake1](public/screenshots/unstakeProcess.png)
-
----
-
-### Unstake Success
-
-![Unstake2](public/screenshots/unstakeSuccess.png)
-
-## ✨ Features
-
-- 🔐 Secure MetaMask wallet connection
-- 💰 Stake USDT tokens
-- 🎁 Earn RWD reward tokens
-- 🔄 Unstake tokens anytime
-- 📊 Live balance updates
-- 📈 Animated dashboard statistics
-- 🌌 Interactive particle background
-- 🎨 Modern glassmorphism interface
-- ⏳ Transaction loading overlay
-- 🔔 Toast notifications
-- 📱 Fully responsive layout
-
----
-
-## 🛠 Technology Stack
-
-### Frontend
-
-- React 18
-- Vite
-- Bootstrap 5
-- React Icons
-- React Toastify
-- React CountUp
+## Tech Stack
 
 ### Blockchain
 
 - Solidity
 - Truffle
 - Ganache
+- Ethereum Sepolia
 - Web3.js
+
+### Frontend
+
+- React
+- Vite
+- Bootstrap
+- React Toastify
 
 ### Wallet
 
@@ -99,67 +50,43 @@ A live demo will be available soon via Vercel.
 
 ---
 
-## 🏗 Architecture
+## Live Demo
 
-```text
-            MetaMask
-                │
-                ▼
-            Web3.js
-                │
-                ▼
-      BlockchainContext
-                │
-     ┌──────────┴──────────┐
-     ▼                     ▼
- React Components     Smart Contracts
-                             │
-               ┌─────────────┼─────────────┐
-               ▼             ▼             ▼
-            Tether         RWD      DecentralBank
-```
+Coming soon...
 
-## 📂 Project Structure
+The application will be deployed on Vercel after final production checks.
 
-```text
-src
-│
-├── components
-│   ├── Navbar
-│   ├── DashboardCards
-│   ├── LoadingOverlay
-│   ├── ParticleSettings
-│   └── Main
-│
-├── contexts
-│   └── BlockchainContext
-│
-├── truffle_abis
-│
-├── contracts
-│
-├── migrations
-│
-└── public
-```
+## Screenshots
+
+Coming soon.
 
 ---
 
-## 📋 Project Highlights
+## Architecture
 
-| Feature | Status |
-|---------|--------|
-| MetaMask Authentication | ✅ |
-| Token Staking | ✅ |
-| Reward Distribution | ✅ |
-| Token Unstaking | ✅ |
-| Glassmorphism UI | ✅ |
-| Animated Statistics | ✅ |
-| Loading Overlay | ✅ |
-| Toast Notifications | ✅ |
-| Responsive Design | ✅ |
+                   MetaMask
+                      │
+                Ethereum Wallet
+                      │
+                  Web3.js
+                      │
+              React + Vite UI
+                      │
+           DecentralBank Contract
+              /                \
+         Tether Token       RWD Token
 
-## ⚙️ Installation
+## Smart Contracts (Ethereum Sepolia)
+
+| Contract | Address |
+|----------|---------|
+| Tether | `0x7F15B077DdBe9f813FAD69adE7Cd3B55624962c0` |
+| RWD | `0xFc2Bb492843B4A7B2470c903556E5aeFdd1ab786` |
+| DecentralBank | `0x929A3496EDdAaAaB8EDA7DEfddA50309729463b6` |
+
+---
+
+## Installation
 
 Clone the repository
 
@@ -167,24 +94,10 @@ Clone the repository
 git clone https://github.com/mikeisresilient/resilient-staking-dapp.git
 ```
 
-Move into the project
-
-```bash
-cd resilient-staking-dapp
-```
-
 Install dependencies
 
 ```bash
 npm install
-```
-
-Start Ganache
-
-Deploy the contracts
-
-```bash
-truffle migrate --reset
 ```
 
 Start the frontend
@@ -195,38 +108,121 @@ npm run dev
 
 ---
 
-## 💡 How It Works
+## Running with Ganache
 
-1. Connect your MetaMask wallet.
-2. Approve USDT spending.
-3. Stake your tokens.
-4. Earn RWD rewards.
-5. Unstake whenever you choose.
-6. Balances update automatically after each transaction.
+1. Start Ganache
+2. Deploy contracts
 
----
+```bash
+truffle migrate --reset
+```
 
-## 🚀 Future Improvements
+3. Connect MetaMask to Ganache
 
-- Portfolio analytics
-- Transaction history
-- Multi-token staking
-- WalletConnect integration
-- Dark and Light mode
-- Sepolia deployment
-- Smart contract security enhancements
+4. Start the application
+
+```bash
+npm run dev
+```
 
 ---
 
-## 👨‍💻 Author
+## Running with Sepolia
 
-**Michael Uchechukwu Ege**
+1. Configure your `.env`
 
-Full Stack Web & Blockchain Developer
+```
+PRIVATE_KEY=your_private_key
+ALCHEMY_URL=your_alchemy_rpc
+```
 
-Web3 Educator
+2. Deploy
 
-Technical Analyst
+```bash
+npx truffle migrate --network sepolia --config truffle-config.cjs
+```
+
+3. Connect MetaMask to Sepolia
+
+4. Launch
+
+```bash
+npm run dev
+```
+
+---
+
+## Project Structure
+
+```
+contracts/
+migrations/
+src/
+    components/
+    truffle_abis/
+public/
+```
+
+---
+
+## How It Works
+
+1. Connect MetaMask.
+2. Approve Tether tokens.
+3. Stake tokens.
+4. Smart contract locks the tokens.
+5. Rewards are distributed.
+6. User can unstake at any time.
+
+---
+
+## Challenges Solved
+
+- Integrated MetaMask with React.
+- Built ERC20 staking workflow.
+- Supported both Ganache and Sepolia without changing frontend logic.
+- Managed blockchain transaction states.
+- Implemented dynamic contract loading based on network ID.
+
+---
+
+## Skills Demonstrated
+
+- Solidity
+- Smart Contract Development
+- ERC20 Tokens
+- React
+- Vite
+- Web3.js
+- Truffle
+- Ethereum
+- MetaMask Integration
+- Blockchain Testing
+- Decentralized Application Development
+
+---
+
+## Future Improvements
+
+- Reward APY calculation
+- WalletConnect support
+- Multiple staking pools
+- Dark / Light theme
+- Token price integration
+- Mobile optimization
+- Admin dashboard
+
+---
+
+## Acknowledgements
+
+Inspired by modern DeFi staking protocols and built for educational and portfolio purposes.
+
+---
+
+## Author
+
+Michael Ege
 
 GitHub
 
@@ -234,12 +230,6 @@ https://github.com/mikeisresilient
 
 ---
 
-## 🙏 Acknowledgements
+## License
 
-This project was inspired by educational Web3 tutorials and expanded into a modern DeFi staking application with significant UI, UX, and architectural improvements.
-
-Special thanks to the open source community and the maintainers of React, Solidity, Truffle, Vite, Web3.js, and MetaMask for providing the tools that made this project possible.
-
-## 📄 License
-
-This project is licensed under the MIT License.
+MIT License
