@@ -8,6 +8,8 @@
 
 Resilient Staking DApp is a decentralized finance (DeFi) application that allows users to securely stake ERC20 tokens, earn blockchain based rewards, and manage their assets through MetaMask. The application supports both Ganache for local development and Ethereum Sepolia for public testnet deployment.
 
+Note: This repository is an enhanced version of an existing DeFi staking application. The original project served as the foundation, while this version focuses on improving the architecture, user experience, compatibility, and deployment readiness.
+
 ---
 
 ## Features
