@@ -60,8 +60,36 @@ The application will be deployed on Vercel after final production checks.
 
 ## Screenshots
 
-Coming soon.
+<table>
+<tr>
+<td align="center">
+<b>Home Page</b><br>
+<img src="screenshots/fullOverview.jpeg" width="450">
+</td>
+<td align="center">
+<b>Loading Approval</b><br>
+<img src="screenshots/loadingApproval.png" width="450">
+</td>
+</tr>
 
+<tr>
+<td align="center">
+<b>Staking Success</b><br>
+<img src="screenshots/stakingSuccess.png" width="450">
+</td>
+<td align="center">
+<b>Unstake Process</b><br>
+<img src="screenshots/unstakeProcess.png" width="450">
+</td>
+</tr>
+</table>
+
+<tr>
+<td align="center">
+<b>Unstaking Success</b><br>
+<img src="screenshots/unstakeSuccess.png" width="450">
+</td>
+</tr>
 ---
 
 ## Architecture
