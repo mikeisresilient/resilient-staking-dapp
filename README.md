@@ -64,7 +64,7 @@ The application will be deployed on Vercel after final production checks.
 <tr>
 <td align="center">
 <b>Home Page</b><br>
-<img src="screenshots/fullOverview.jpeg" width="450">
+<img src="public/screenshots/fullOverview.jpeg" width="450">
 </td>
 <td align="center">
 <b>Loading Approval</b><br>
