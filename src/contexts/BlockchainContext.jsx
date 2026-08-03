@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import Web3 from 'web3';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import Web3 from "web3";
 import Tether from "../truffle_abis/Tether.json";
 import RWD from "../truffle_abis/RWD.json";
 import DecentralBank from "../truffle_abis/DecentralBank.json";
@@ -12,16 +12,16 @@ export const useBlockchain = () => {
 };
 
 export const BlockchainProvider = ({ children }) => {
-  const [account, setAccount] = useState('0x0');
+  const [account, setAccount] = useState("0x0");
   const [tether, setTether] = useState({});
   const [rwd, setRwd] = useState({});
   const [decentralBank, setDecentralBank] = useState({});
-  const [tetherBalance, setTetherBalance] = useState('0');
-  const [rwdBalance, setRwdBalance] = useState('0');
-  const [stakingBalance, setStakingBalance] = useState('0');
+  const [tetherBalance, setTetherBalance] = useState("0");
+  const [rwdBalance, setRwdBalance] = useState("0");
+  const [stakingBalance, setStakingBalance] = useState("0");
   const [loading, setLoading] = useState(true);
   const [transactionLoading, setTransactionLoading] = useState(false);
-  const [transactionStatus, setTransactionStatus] = useState('');
+  const [transactionStatus, setTransactionStatus] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -40,7 +40,7 @@ export const BlockchainProvider = ({ children }) => {
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
     } else {
-      window.alert('No ethereum browser detected! You can check out MetaMask!');
+      window.alert("No ethereum browser detected! You can check out MetaMask!");
     }
   };
 
@@ -56,19 +56,22 @@ export const BlockchainProvider = ({ children }) => {
 
       setAccount(accounts[0]);
 
-      const networkId = await web3.eth.net.getId();
+      const networkId = Number(await web3.eth.net.getId());
 
-      console.log("Network:", networkId);
+      if (networkId !== 11155111) {
+        alert("Please switch MetaMask to the Sepolia Test Network.");
+        setLoading(false);
+        return;
+      }
 
       // Tether
       const tetherData = Tether.networks[networkId];
 
-      if (!tetherData)
-        throw new Error("Tether contract not deployed.");
+      if (!tetherData) throw new Error("Tether contract not deployed.");
 
       const tetherContract = new web3.eth.Contract(
         Tether.abi,
-        tetherData.address
+        tetherData.address,
       );
 
       setTether(tetherContract);
@@ -82,13 +85,9 @@ export const BlockchainProvider = ({ children }) => {
       // RWD
       const rwdData = RWD.networks[networkId];
 
-      if (!rwdData)
-        throw new Error("RWD contract not deployed.");
+      if (!rwdData) throw new Error("RWD contract not deployed.");
 
-      const rwdContract = new web3.eth.Contract(
-        RWD.abi,
-        rwdData.address
-      );
+      const rwdContract = new web3.eth.Contract(RWD.abi, rwdData.address);
 
       setRwd(rwdContract);
 
@@ -101,13 +100,9 @@ export const BlockchainProvider = ({ children }) => {
       // Bank
       const bankData = DecentralBank.networks[networkId];
 
-      if (!bankData)
-        throw new Error("DecentralBank contract not deployed.");
+      if (!bankData) throw new Error("DecentralBank contract not deployed.");
 
-      const bank = new web3.eth.Contract(
-        DecentralBank.abi,
-        bankData.address
-      );
+      const bank = new web3.eth.Contract(DecentralBank.abi, bankData.address);
 
       setDecentralBank(bank);
 
@@ -116,11 +111,9 @@ export const BlockchainProvider = ({ children }) => {
         .call();
 
       setStakingBalance(stakingBalance.toString());
-
     } catch (err) {
       console.error(err);
       alert(err.message);
-
     } finally {
       setLoading(false);
     }
@@ -129,22 +122,27 @@ export const BlockchainProvider = ({ children }) => {
   const stakeTokens = (amount) => {
     setTransactionLoading(true);
     setTransactionStatus("Waiting for approval...");
-    tether.methods.approve(decentralBank.options.address, amount).send({ from: account }).on('transactionHash', () => {
-      setTransactionStatus("Approval confirmed. Staking tokens...");
-      decentralBank.methods.depositTokens(amount).send({ from: account })
-        .on('receipt', (receipt) => {
-          setTransactionLoading(false);
-          toast.success("✅ Tokens staked successfully!");
-          setTransactionStatus("Staking successful!");
-          loadBlockchainData();
-        })
-        .on('error', (error) => {
-          setTransactionLoading(false);
-          toast.error("❌ Staking failed.");
-          setTransactionStatus("Staking failed.");
-        });
-    })
-      .on('error', (error) => {
+    tether.methods
+      .approve(decentralBank.options.address, amount)
+      .send({ from: account })
+      .on("transactionHash", () => {
+        setTransactionStatus("Approval confirmed. Staking tokens...");
+        decentralBank.methods
+          .depositTokens(amount)
+          .send({ from: account })
+          .on("receipt", (receipt) => {
+            setTransactionLoading(false);
+            toast.success("✅ Tokens staked successfully!");
+            setTransactionStatus("Staking successful!");
+            loadBlockchainData();
+          })
+          .on("error", (error) => {
+            setTransactionLoading(false);
+            toast.error("❌ Staking failed.");
+            setTransactionStatus("Staking failed.");
+          });
+      })
+      .on("error", (error) => {
         setTransactionLoading(false);
         toast.error("❌ Approval rejected.");
         setTransactionStatus("Approval failed.");
@@ -153,15 +151,17 @@ export const BlockchainProvider = ({ children }) => {
 
   const unstakeTokens = () => {
     setTransactionLoading(true);
-    setTransactionStatus('');
-    decentralBank.methods.unstakeTokens().send({ from: account })
-      .on('receipt', (receipt) => {
+    setTransactionStatus("");
+    decentralBank.methods
+      .unstakeTokens()
+      .send({ from: account })
+      .on("receipt", (receipt) => {
         setTransactionLoading(false);
         toast.success("🎉 Tokens unstaked successfully!");
         setTransactionStatus("Unstaking successful!");
         loadBlockchainData();
       })
-      .on('error', (error) => {
+      .on("error", (error) => {
         setLoading(false);
         toast.error("❌ Unstaking failed.");
         setTransactionStatus("Unstaking failed.");
