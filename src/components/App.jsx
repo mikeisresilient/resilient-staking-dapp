@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import Navbar from './Navbar';
 import Main from './Main';
-import ParticleSettings from './ParticleSettings';
 import { useBlockchain } from '../contexts/BlockchainContext';
 import LoadingOverlay from "./LoadingOverlay";
 import { ToastContainer } from "react-toastify";
@@ -34,7 +33,6 @@ function App() {
         message={transactionStatus}
       />
       <div style={{ position: 'absolute' }}>
-        <ParticleSettings />
       </div>
       <Navbar account={account} />
       <div className='container-fluid mt-5'>
