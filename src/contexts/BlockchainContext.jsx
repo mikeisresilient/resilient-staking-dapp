@@ -1,8 +1,16 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+
 import Web3 from "web3";
+
 import Tether from "../truffle_abis/Tether.json";
 import RWD from "../truffle_abis/RWD.json";
 import DecentralBank from "../truffle_abis/DecentralBank.json";
+
 import { toast } from "react-toastify";
 
 const BlockchainContext = createContext();
@@ -12,179 +20,680 @@ export const useBlockchain = () => {
 };
 
 export const BlockchainProvider = ({ children }) => {
-  const [account, setAccount] = useState("0x0");
+
+  /* =========================================
+     WALLET STATE
+     ========================================= */
+
+  const [account, setAccount] = useState(null);
+
+  const [networkId, setNetworkId] = useState(null);
+
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+
+
+  /* =========================================
+     CONTRACT STATE
+     ========================================= */
+
   const [tether, setTether] = useState({});
   const [rwd, setRwd] = useState({});
   const [decentralBank, setDecentralBank] = useState({});
+
+
+  /* =========================================
+     BALANCES
+     ========================================= */
+
   const [tetherBalance, setTetherBalance] = useState("0");
   const [rwdBalance, setRwdBalance] = useState("0");
   const [stakingBalance, setStakingBalance] = useState("0");
+
+
+  /* =========================================
+     UI STATE
+     ========================================= */
+
   const [loading, setLoading] = useState(true);
-  const [transactionLoading, setTransactionLoading] = useState(false);
-  const [transactionStatus, setTransactionStatus] = useState("");
+
+  const [transactionLoading, setTransactionLoading] =
+    useState(false);
+
+  const [transactionStatus, setTransactionStatus] =
+    useState("");
+
+
+  /* =========================================
+     INITIALIZE WEB3
+     ========================================= */
 
   useEffect(() => {
-    const load = async () => {
-      await loadWeb3();
-      await loadBlockchainData();
-    };
-    load();
-  }, []);
 
-  const loadWeb3 = async () => {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-    } else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider);
-    } else {
-      window.alert("No ethereum browser detected! You can check out MetaMask!");
-    }
-  };
+    const initialize = async () => {
 
-  const loadBlockchainData = async () => {
-    try {
-      const web3 = window.web3;
-
-      const accounts = await web3.eth.getAccounts();
-
-      if (!accounts.length) {
-        throw new Error("No MetaMask account connected.");
-      }
-
-      setAccount(accounts[0]);
-
-      const networkId = Number(await web3.eth.net.getId());
-
-      if (networkId !== 11155111) {
-        alert("Please switch MetaMask to the Sepolia Test Network.");
+      if (!window.ethereum) {
+        console.warn("MetaMask not detected.");
         setLoading(false);
         return;
       }
 
-      // Tether
-      const tetherData = Tether.networks[networkId];
+      window.web3 = new Web3(window.ethereum);
 
-      if (!tetherData) throw new Error("Tether contract not deployed.");
+      try {
 
-      const tetherContract = new web3.eth.Contract(
-        Tether.abi,
-        tetherData.address,
+        /*
+         * Check whether MetaMask is already connected.
+         *
+         * IMPORTANT:
+         * We do NOT call eth_requestAccounts here.
+         * That prevents the DApp from automatically
+         * requesting wallet access on page load.
+         */
+
+        const accounts =
+          await window.ethereum.request({
+            method: "eth_accounts",
+          });
+
+        if (accounts.length > 0) {
+
+          setAccount(accounts[0]);
+          setIsWalletConnected(true);
+
+          await loadBlockchainData(accounts[0]);
+
+        } else {
+
+          setAccount(null);
+          setIsWalletConnected(false);
+
+          setLoading(false);
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Wallet initialization failed:",
+          error
+        );
+
+        setAccount(null);
+        setIsWalletConnected(false);
+
+        setLoading(false);
+      }
+    };
+
+
+    initialize();
+
+
+    /* =========================================
+       ACCOUNT CHANGE
+       ========================================= */
+
+    const handleAccountsChanged = async (accounts) => {
+
+      if (!accounts || accounts.length === 0) {
+
+        /*
+         * User disconnected the account from MetaMask
+         * or removed the account connection.
+         */
+
+        setAccount(null);
+        setIsWalletConnected(false);
+
+        clearBlockchainData();
+
+        return;
+      }
+
+      const newAccount = accounts[0];
+
+      setAccount(newAccount);
+      setIsWalletConnected(true);
+
+      await loadBlockchainData(newAccount);
+    };
+
+
+    /* =========================================
+       NETWORK CHANGE
+       ========================================= */
+
+    const handleChainChanged = async () => {
+
+      /*
+       * Reloading is the safest way to ensure
+       * all contract instances and balances use
+       * the new network.
+       */
+
+      window.location.reload();
+    };
+
+
+    window.ethereum?.on(
+      "accountsChanged",
+      handleAccountsChanged
+    );
+
+    window.ethereum?.on(
+      "chainChanged",
+      handleChainChanged
+    );
+
+
+    /* =========================================
+       CLEANUP
+       ========================================= */
+
+    return () => {
+
+      window.ethereum?.removeListener(
+        "accountsChanged",
+        handleAccountsChanged
       );
 
-      setTether(tetherContract);
+      window.ethereum?.removeListener(
+        "chainChanged",
+        handleChainChanged
+      );
+    };
 
-      const tetherBalance = await tetherContract.methods
-        .balanceOf(accounts[0])
-        .call();
+  }, []);
 
-      setTetherBalance(tetherBalance.toString());
 
-      // RWD
-      const rwdData = RWD.networks[networkId];
+  /* =========================================
+     CONNECT WALLET
+     ========================================= */
 
-      if (!rwdData) throw new Error("RWD contract not deployed.");
+  const connectWallet = async () => {
 
-      const rwdContract = new web3.eth.Contract(RWD.abi, rwdData.address);
+    if (!window.ethereum) {
 
-      setRwd(rwdContract);
+      toast.error(
+        "MetaMask is not installed."
+      );
 
-      const rwdBalance = await rwdContract.methods
-        .balanceOf(accounts[0])
-        .call();
+      return;
+    }
 
-      setRwdBalance(rwdBalance.toString());
+    try {
 
-      // Bank
-      const bankData = DecentralBank.networks[networkId];
+      window.web3 = new Web3(
+        window.ethereum
+      );
 
-      if (!bankData) throw new Error("DecentralBank contract not deployed.");
+      const accounts =
+        await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
 
-      const bank = new web3.eth.Contract(DecentralBank.abi, bankData.address);
+      if (!accounts.length) {
 
-      setDecentralBank(bank);
+        setAccount(null);
+        setIsWalletConnected(false);
 
-      const stakingBalance = await bank.methods
-        .stakingBalance(accounts[0])
-        .call();
+        return;
+      }
 
-      setStakingBalance(stakingBalance.toString());
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    } finally {
+      const connectedAccount =
+        accounts[0];
+
+      setAccount(connectedAccount);
+      setIsWalletConnected(true);
+
+      await loadBlockchainData(
+        connectedAccount
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Wallet connection failed:",
+        error
+      );
+
+      setAccount(null);
+      setIsWalletConnected(false);
+
+      toast.error(
+        "Wallet connection was rejected."
+      );
+
       setLoading(false);
     }
   };
 
+
+  /* =========================================
+     DISCONNECT WALLET
+     ========================================= */
+
+  const disconnectWallet = () => {
+
+    /*
+     * A website cannot revoke MetaMask's permission
+     * directly.
+     *
+     * We disconnect the DApp's active wallet state.
+     */
+
+    setAccount(null);
+
+    setIsWalletConnected(false);
+
+    clearBlockchainData();
+
+    setTransactionStatus("");
+
+    toast.info(
+      "Wallet disconnected from the DApp."
+    );
+  };
+
+
+  /* =========================================
+     CLEAR BLOCKCHAIN DATA
+     ========================================= */
+
+  const clearBlockchainData = () => {
+
+    setTether({});
+    setRwd({});
+    setDecentralBank({});
+
+    setTetherBalance("0");
+    setRwdBalance("0");
+    setStakingBalance("0");
+
+    setTransactionLoading(false);
+    setTransactionStatus("");
+  };
+
+
+  /* =========================================
+     LOAD BLOCKCHAIN DATA
+     ========================================= */
+
+  const loadBlockchainData = async (
+    selectedAccount = account
+  ) => {
+
+    try {
+
+      if (!window.web3) {
+
+        window.web3 = new Web3(
+          window.ethereum
+        );
+      }
+
+      const web3 = window.web3;
+
+
+      /* =========================================
+         CHECK ACCOUNT
+         ========================================= */
+
+      if (!selectedAccount) {
+
+        setAccount(null);
+        setIsWalletConnected(false);
+
+        clearBlockchainData();
+
+        setLoading(false);
+
+        return;
+      }
+
+
+      setAccount(selectedAccount);
+      setIsWalletConnected(true);
+
+
+      /* =========================================
+         NETWORK
+         ========================================= */
+
+      const currentNetworkId =
+        Number(
+          await web3.eth.net.getId()
+        );
+
+      setNetworkId(currentNetworkId);
+
+
+      /* =========================================
+         SEPOLIA CHECK
+         ========================================= */
+
+      if (currentNetworkId !== 11155111) {
+
+        setTether({});
+        setRwd({});
+        setDecentralBank({});
+
+        setTetherBalance("0");
+        setRwdBalance("0");
+        setStakingBalance("0");
+
+        setLoading(false);
+
+        toast.warning(
+          "Please switch MetaMask to the Sepolia Test Network."
+        );
+
+        return;
+      }
+
+
+      /* =========================================
+         TETHER
+         ========================================= */
+
+      const tetherData =
+        Tether.networks[currentNetworkId];
+
+      if (!tetherData) {
+
+        throw new Error(
+          "Tether contract not deployed."
+        );
+      }
+
+      const tetherContract =
+        new web3.eth.Contract(
+          Tether.abi,
+          tetherData.address
+        );
+
+      setTether(tetherContract);
+
+
+      const tetherBalance =
+        await tetherContract.methods
+          .balanceOf(selectedAccount)
+          .call();
+
+      setTetherBalance(
+        tetherBalance.toString()
+      );
+
+
+      /* =========================================
+         RWD
+         ========================================= */
+
+      const rwdData =
+        RWD.networks[currentNetworkId];
+
+      if (!rwdData) {
+
+        throw new Error(
+          "RWD contract not deployed."
+        );
+      }
+
+      const rwdContract =
+        new web3.eth.Contract(
+          RWD.abi,
+          rwdData.address
+        );
+
+      setRwd(rwdContract);
+
+
+      const rwdBalance =
+        await rwdContract.methods
+          .balanceOf(selectedAccount)
+          .call();
+
+      setRwdBalance(
+        rwdBalance.toString()
+      );
+
+
+      /* =========================================
+         DECENTRAL BANK
+         ========================================= */
+
+      const bankData =
+        DecentralBank.networks[
+          currentNetworkId
+        ];
+
+      if (!bankData) {
+
+        throw new Error(
+          "DecentralBank contract not deployed."
+        );
+      }
+
+      const bank =
+        new web3.eth.Contract(
+          DecentralBank.abi,
+          bankData.address
+        );
+
+      setDecentralBank(bank);
+
+
+      const stakingBalance =
+        await bank.methods
+          .stakingBalance(selectedAccount)
+          .call();
+
+      setStakingBalance(
+        stakingBalance.toString()
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+      setAccount(null);
+      setIsWalletConnected(false);
+
+      toast.error(
+        err.message || "Unable to load blockchain data."
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+
+  /* =========================================
+     STAKE TOKENS
+     ========================================= */
+
   const stakeTokens = (amount) => {
+
+    if (!account) {
+
+      toast.error(
+        "Please connect your wallet first."
+      );
+
+      return;
+    }
+
     setTransactionLoading(true);
-    setTransactionStatus("Waiting for approval...");
+
+    setTransactionStatus(
+      "Waiting for approval..."
+    );
+
     tether.methods
-      .approve(decentralBank.options.address, amount)
-      .send({ from: account })
+      .approve(
+        decentralBank.options.address,
+        amount
+      )
+      .send({
+        from: account,
+      })
+
       .on("transactionHash", () => {
-        setTransactionStatus("Approval confirmed. Staking tokens...");
+
+        setTransactionStatus(
+          "Approval confirmed. Staking tokens..."
+        );
+
         decentralBank.methods
           .depositTokens(amount)
-          .send({ from: account })
-          .on("receipt", (receipt) => {
-            setTransactionLoading(false);
-            toast.success("✅ Tokens staked successfully!");
-            setTransactionStatus("Staking successful!");
-            loadBlockchainData();
+          .send({
+            from: account,
           })
-          .on("error", (error) => {
+
+          .on("receipt", () => {
+
             setTransactionLoading(false);
-            toast.error("❌ Staking failed.");
-            setTransactionStatus("Staking failed.");
+
+            toast.success(
+              "✅ Tokens staked successfully!"
+            );
+
+            setTransactionStatus(
+              "Staking successful!"
+            );
+
+            loadBlockchainData(account);
+          })
+
+          .on("error", () => {
+
+            setTransactionLoading(false);
+
+            toast.error(
+              "❌ Staking failed."
+            );
+
+            setTransactionStatus(
+              "Staking failed."
+            );
           });
       })
-      .on("error", (error) => {
+
+      .on("error", () => {
+
         setTransactionLoading(false);
-        toast.error("❌ Approval rejected.");
-        setTransactionStatus("Approval failed.");
+
+        toast.error(
+          "❌ Approval rejected."
+        );
+
+        setTransactionStatus(
+          "Approval failed."
+        );
       });
   };
+
+
+  /* =========================================
+     UNSTAKE TOKENS
+     ========================================= */
 
   const unstakeTokens = () => {
+
+    if (!account) {
+
+      toast.error(
+        "Please connect your wallet first."
+      );
+
+      return;
+    }
+
     setTransactionLoading(true);
+
     setTransactionStatus("");
+
     decentralBank.methods
       .unstakeTokens()
-      .send({ from: account })
-      .on("receipt", (receipt) => {
-        setTransactionLoading(false);
-        toast.success("🎉 Tokens unstaked successfully!");
-        setTransactionStatus("Unstaking successful!");
-        loadBlockchainData();
+      .send({
+        from: account,
       })
-      .on("error", (error) => {
-        setLoading(false);
-        toast.error("❌ Unstaking failed.");
-        setTransactionStatus("Unstaking failed.");
+
+      .on("receipt", () => {
+
+        setTransactionLoading(false);
+
+        toast.success(
+          "🎉 Tokens unstaked successfully!"
+        );
+
+        setTransactionStatus(
+          "Unstaking successful!"
+        );
+
+        loadBlockchainData(account);
+      })
+
+      .on("error", () => {
+
+        setTransactionLoading(false);
+
+        toast.error(
+          "❌ Unstaking failed."
+        );
+
+        setTransactionStatus(
+          "Unstaking failed."
+        );
       });
   };
 
+
+  /* =========================================
+     CONTEXT VALUE
+     ========================================= */
+
   const value = {
+
     account,
+
+    networkId,
+
+    isWalletConnected,
+
+    connectWallet,
+
+    disconnectWallet,
+
     tether,
+
     rwd,
+
     decentralBank,
+
     tetherBalance,
+
     rwdBalance,
+
     stakingBalance,
+
     loading,
+
     transactionLoading,
+
     transactionStatus,
+
     stakeTokens,
+
     unstakeTokens,
   };
 
+
   return (
-    <BlockchainContext.Provider value={value}>
+    <BlockchainContext.Provider
+      value={value}
+    >
       {children}
     </BlockchainContext.Provider>
   );

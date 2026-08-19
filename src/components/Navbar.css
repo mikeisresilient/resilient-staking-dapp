@@ -1,134 +1,515 @@
-.navbar-modern{
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.navbar-modern {
     position: sticky;
-    top:0;
-    z-index:1000;
+    top: 0;
+    z-index: 1000;
 
-    padding:16px 28px;
+    width: 100%;
 
-    background:rgba(15,23,42,.72);
+    padding: 16px 28px;
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    background: rgba(15, 23, 42, 0.72);
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    box-shadow:0 8px 24px rgba(0,0,0,.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
 }
 
-.navbar-brand-modern{
-    display:flex;
-    align-items:center;
-    gap:12px;
 
-    color:white !important;
+/* =========================================
+   NAVBAR INNER
+   ========================================= */
 
-    font-size:1.35rem;
+.navbar-inner {
+    width: 100%;
+    max-width: 100%;
 
-    font-weight:700;
+    min-width: 0;
 
-    text-decoration:none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    box-sizing: border-box;
 }
 
-.navbar-brand-modern img{
-    transition:.3s;
+
+/* =========================================
+   BRAND
+   ========================================= */
+
+.navbar-brand-modern {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: white !important;
+
+    font-size: 1.25rem;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    min-width: 0;
+
+    white-space: nowrap;
+
+    flex: 0 1 auto;
 }
 
-.navbar-brand-modern:hover img{
-    transform:rotate(-8deg) scale(1.08);
+
+/* =========================================
+   LOGO
+   ========================================= */
+
+.navbar-brand-modern img {
+    width: 42px;
+    height: 42px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    flex: 0 0 42px;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-.wallet-section{
+.navbar-brand-modern:hover img {
+    transform: rotate(-6deg) scale(1.06);
 
-    margin-left:auto;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
+    box-shadow:
+        0 0 18px rgba(59, 130, 246, 0.25);
 }
 
-.connection-status{
 
-    display:flex;
+/* =========================================
+   WALLET SECTION
+   ========================================= */
 
-    align-items:center;
+.wallet-section {
+    display: flex;
+    align-items: center;
 
-    gap:8px;
+    justify-content: flex-end;
 
-    color:#22C55E;
+    gap: 12px;
 
-    font-weight:600;
+    min-width: 0;
 
+    margin-left: auto;
 }
 
-.status-dot{
 
-    width:10px;
+/* =========================================
+   CONNECTION STATUS
+   ========================================= */
 
-    height:10px;
+.connection-status {
+    display: flex;
+    align-items: center;
 
-    border-radius:50%;
+    gap: 8px;
 
-    background:#22C55E;
+    font-weight: 600;
 
-    box-shadow:0 0 12px #22C55E;
+    white-space: nowrap;
 
+    flex-shrink: 0;
 }
 
-.wallet-pill{
-
-    padding:10px 18px;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    color:white;
-
-    font-family:monospace;
-
-    transition:.3s;
-
+.connection-status.connected {
+    color: #22c55e;
 }
 
-.wallet-pill:hover{
-
-    transform:translateY(-2px);
-
-    border-color:#3B82F6;
-
-    box-shadow:0 0 18px rgba(59,130,246,.3);
-
+.connection-status.disconnected {
+    color: #94a3b8;
 }
 
-@media(max-width:768px){
 
-    .wallet-section{
+/* =========================================
+   STATUS DOT
+   ========================================= */
 
-        gap:10px;
+.status-dot {
+    width: 10px;
+    height: 10px;
 
-        flex-direction:column;
+    flex: 0 0 10px;
 
-        align-items:flex-end;
+    border-radius: 50%;
+}
 
+.connection-status.connected .status-dot {
+    background: #22c55e;
+
+    box-shadow:
+        0 0 12px #22c55e;
+}
+
+.connection-status.disconnected .status-dot {
+    background: #64748b;
+
+    box-shadow:
+        0 0 8px rgba(100, 116, 139, 0.4);
+}
+
+
+/* =========================================
+   WALLET ADDRESS
+   ========================================= */
+
+.wallet-pill {
+    padding: 10px 16px;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-family: monospace;
+
+    max-width: 180px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.wallet-pill:hover {
+    transform: translateY(-2px);
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 18px rgba(59, 130, 246, 0.3);
+}
+
+
+/* =========================================
+   CONNECT BUTTON
+   ========================================= */
+
+.connect-button {
+    border: 1px solid rgba(59, 130, 246, 0.45);
+
+    background: rgba(37, 99, 235, 0.15);
+
+    color: #60a5fa;
+
+    padding: 9px 14px;
+
+    border-radius: 12px;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.connect-button:hover {
+    background: rgba(37, 99, 235, 0.28);
+
+    border-color: #3b82f6;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 18px rgba(59, 130, 246, 0.25);
+}
+
+.connect-button:active {
+    transform: translateY(0);
+}
+
+.connect-button:focus-visible {
+    outline: 2px solid #3b82f6;
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================
+   DISCONNECT BUTTON
+   ========================================= */
+
+.disconnect-button {
+    border: 1px solid rgba(239, 68, 68, 0.35);
+
+    background: rgba(239, 68, 68, 0.08);
+
+    color: #f87171;
+
+    padding: 9px 14px;
+
+    border-radius: 12px;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.disconnect-button:hover {
+    background: rgba(239, 68, 68, 0.16);
+
+    border-color: rgba(239, 68, 68, 0.65);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 18px rgba(239, 68, 68, 0.15);
+}
+
+.disconnect-button:active {
+    transform: translateY(0);
+}
+
+.disconnect-button:focus-visible {
+    outline: 2px solid #ef4444;
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================
+   TABLETS
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .navbar-modern {
+        padding: 14px 12px;
     }
 
-    .navbar-brand-modern{
+    .navbar-inner {
+        flex-direction: column;
 
-        font-size:1.1rem;
+        align-items: center;
 
+        gap: 12px;
     }
 
-    .wallet-pill{
+    .navbar-brand-modern {
+        font-size: 1.1rem;
 
-        font-size:.8rem;
+        gap: 9px;
 
-        padding:8px 12px;
-
+        max-width: 100%;
     }
 
+    .navbar-brand-modern img {
+        width: 36px;
+        height: 36px;
+
+        flex-basis: 36px;
+
+        border-radius: 10px;
+    }
+
+    .wallet-section {
+        width: 100%;
+        max-width: 100%;
+
+        margin-left: 0;
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+    }
+
+    .connection-status {
+        font-size: 0.85rem;
+    }
+
+    .wallet-pill {
+        max-width: 150px;
+
+        padding: 8px 12px;
+
+        font-size: 0.75rem;
+    }
+
+    .connect-button,
+    .disconnect-button {
+        padding: 8px 12px;
+
+        font-size: 0.78rem;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+   ========================================= */
+
+@media (max-width: 576px) {
+
+    .navbar-modern {
+        padding: 12px 10px;
+    }
+
+    .navbar-inner {
+        gap: 10px;
+    }
+
+    .navbar-brand-modern {
+        font-size: 1rem;
+
+        gap: 8px;
+    }
+
+    .navbar-brand-modern img {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+
+        border-radius: 9px;
+    }
+
+    .wallet-section {
+        gap: 7px;
+    }
+
+    .connection-status {
+        font-size: 0.78rem;
+
+        gap: 6px;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+
+        flex-basis: 8px;
+    }
+
+    .wallet-pill {
+        max-width: 135px;
+
+        padding: 7px 10px;
+
+        font-size: 0.7rem;
+    }
+
+    .connect-button,
+    .disconnect-button {
+        padding: 7px 10px;
+
+        font-size: 0.72rem;
+
+        border-radius: 10px;
+    }
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+   ========================================= */
+
+@media (max-width: 375px) {
+
+    .navbar-modern {
+        padding: 10px 8px;
+    }
+
+    .navbar-inner {
+        gap: 8px;
+    }
+
+    .navbar-brand-modern {
+        font-size: 0.95rem;
+
+        gap: 7px;
+    }
+
+    .navbar-brand-modern img {
+        width: 32px;
+        height: 32px;
+
+        flex-basis: 32px;
+
+        border-radius: 8px;
+    }
+
+    .wallet-section {
+        gap: 6px;
+    }
+
+    .connection-status {
+        font-size: 0.72rem;
+    }
+
+    .wallet-pill {
+        max-width: 120px;
+
+        padding: 6px 8px;
+
+        font-size: 0.65rem;
+    }
+
+    .connect-button,
+    .disconnect-button {
+        padding: 6px 8px;
+
+        font-size: 0.65rem;
+
+        border-radius: 9px;
+    }
 }

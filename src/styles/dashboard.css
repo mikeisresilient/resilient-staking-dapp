@@ -85,3 +85,50 @@
 
     font-size: .9rem;
 }
+
+/* =========================================
+   DASHBOARD CARD SPACING
+   ========================================= */
+
+.dashboard-cards-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    margin-left: -12px;
+    margin-right: -12px;
+}
+
+.dashboard-cards-row > [class*="col-"] {
+    padding-left: 12px;
+    padding-right: 12px;
+
+    margin-bottom: 24px;
+
+    min-width: 0;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .dashboard-cards-row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .dashboard-cards-row > [class*="col-"] {
+        width: 100%;
+
+        padding-left: 0;
+        padding-right: 0;
+
+        margin-bottom: 18px;
+    }
+
+    .dashboard-cards-row > [class*="col-"]:last-child {
+        margin-bottom: 0;
+    }
+}

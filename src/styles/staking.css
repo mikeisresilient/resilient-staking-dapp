@@ -45,12 +45,11 @@
 
 }
 
-.balance-text{
+.balance-text {
+    color: var(--text-muted);
+    font-size: .9rem;
 
-    color:var(--text-muted);
-
-    font-size:.9rem;
-
+    transform: translateY(-8px);
 }
 
 .wallet-address{
@@ -142,5 +141,182 @@
 .stake-card{
 
     animation:fadeUp .6s ease;
+
+}
+
+/* =========================================
+   STAKING INPUT
+   ========================================= */
+
+.stake-input-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    padding: 0;
+
+    border-radius: 16px;
+
+    background: rgba(30, 41, 59, 0.95);
+
+    border: 1px solid rgba(148, 163, 184, 0.25);
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================
+   INPUT
+   ========================================= */
+
+.stake-input {
+    flex: 1 1 auto;
+
+    width: 100%;
+    min-width: 0;
+
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 15px 16px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 1.1rem;
+
+    font-family: inherit;
+}
+
+
+/* Remove browser number controls */
+
+.stake-input::-webkit-outer-spin-button,
+.stake-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stake-input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+
+/* Placeholder */
+
+.stake-input::placeholder {
+    color: #94A3B8;
+}
+
+
+/* =========================================
+   TOKEN DISPLAY
+   ========================================= */
+
+.stake-token {
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    color: white;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+}
+
+
+.stake-token-icon {
+    width: 32px;
+    height: 32px;
+
+    flex: 0 0 32px;
+
+    object-fit: contain;
+}
+
+
+/* =========================================
+   MOBILE INPUT
+   ========================================= */
+
+@media (max-width: 576px) {
+
+    .stake-input-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .stake-input {
+        min-width: 0;
+
+        padding: 14px 14px;
+
+        font-size: 1rem;
+    }
+
+    .stake-token {
+        gap: 6px;
+
+        padding: 8px 10px;
+
+        font-size: 0.9rem;
+    }
+
+    .stake-token-icon {
+        width: 30px;
+        height: 30px;
+
+        flex-basis: 30px;
+    }
+
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+   ========================================= */
+
+@media (max-width: 375px) {
+
+    .stake-input {
+        padding: 13px 12px;
+    }
+
+    .stake-token {
+        gap: 5px;
+
+        padding: 7px 8px;
+
+        font-size: 0.82rem;
+    }
+
+    .stake-token-icon {
+        width: 28px;
+        height: 28px;
+
+        flex-basis: 28px;
+    }
 
 }
