@@ -2,36 +2,66 @@ import React from "react";
 import bank from "../bank.png";
 import "./Navbar.css";
 
-const Navbar = ({ account }) => {
+const Navbar = ({ account, onConnect, onDisconnect }) => {
+  const isConnected = Boolean(account);
+
   const shortAccount =
     account && account.length > 10
       ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
-      : "Not Connected";
+      : "";
 
   return (
-    <nav className="navbar-modern navbar navbar-expand-lg">
-      <div className="container-fluid">
+    <nav className="navbar-modern">
+      <div className="container-fluid navbar-inner">
 
+        {/* Brand */}
         <span className="navbar-brand-modern">
           <img
             src={bank}
-            alt="logo"
-            width="42"
+            alt="Resilient Stake logo"
           />
 
           <span>Resilient Stake</span>
         </span>
 
+        {/* Wallet Section */}
         <div className="wallet-section">
 
-          <span className="connection-status">
-            <span className="status-dot"></span>
-            Connected
-          </span>
+          {isConnected ? (
+            <>
+              <span className="connection-status connected">
+                <span className="status-dot"></span>
+                Connected
+              </span>
 
-          <div className="wallet-pill">
-            {shortAccount}
-          </div>
+              <div className="wallet-pill">
+                {shortAccount}
+              </div>
+
+              <button
+                type="button"
+                className="disconnect-button"
+                onClick={onDisconnect}
+              >
+                Disconnect
+              </button>
+            </>
+          ) : (
+            <>
+              <span className="connection-status disconnected">
+                <span className="status-dot"></span>
+                Not Connected
+              </span>
+
+              <button
+                type="button"
+                className="connect-button"
+                onClick={onConnect}
+              >
+                Connect Wallet
+              </button>
+            </>
+          )}
 
         </div>
 

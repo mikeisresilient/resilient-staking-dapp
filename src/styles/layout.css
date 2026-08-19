@@ -1,29 +1,151 @@
-body{
+/* =========================================
+   GLOBAL PAGE LAYOUT
+   ========================================= */
 
-    background:linear-gradient(
+body {
+    width: 100%;
+    min-width: 0;
+
+    background: linear-gradient(
         180deg,
         #0F172A,
         #111827,
         #020617
     );
 
-    color:var(--text);
+    color: var(--text);
 
     font-family:
         Inter,
         system-ui,
         sans-serif;
 
+    overflow-x: hidden;
 }
 
-.container{
 
-    max-width:1200px;
+/* =========================================
+   BOOTSTRAP CONTAINER
+   ========================================= */
 
+.container {
+    width: 100%;
+    max-width: 1200px;
+
+    min-width: 0;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    box-sizing: border-box;
 }
 
-#content{
 
-    padding-bottom:60px;
+/* =========================================
+   MAIN CONTENT
+   ========================================= */
 
+#content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    padding-bottom: 60px;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   APP MAIN
+   ========================================= */
+
+.app-main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+}
+
+.app-main > div {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   MAIN CONTENT WRAPPER
+   ========================================= */
+
+.main-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   TABLETS
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    #content {
+        padding-bottom: 40px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 576px) {
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #content {
+        padding-bottom: 35px;
+    }
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE
+   ========================================= */
+
+@media (max-width: 375px) {
+
+    .container {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    #content {
+        padding-bottom: 30px;
+    }
 }

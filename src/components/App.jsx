@@ -1,18 +1,44 @@
-import React from 'react';
-import './App.css';
-import Navbar from './Navbar';
-import Main from './Main';
-import { useBlockchain } from '../contexts/BlockchainContext';
+import React from "react";
+import "./App.css";
+import Navbar from "./Navbar";
+import Main from "./Main";
+import { useBlockchain } from "../contexts/BlockchainContext";
 import LoadingOverlay from "./LoadingOverlay";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const { account, loading, transactionLoading, tetherBalance, rwdBalance, stakingBalance, stakeTokens, unstakeTokens, transactionStatus } = useBlockchain();
+  const {
+    account,
+    loading,
+    transactionLoading,
+    tetherBalance,
+    rwdBalance,
+    stakingBalance,
+    stakeTokens,
+    unstakeTokens,
+    transactionStatus,
+    connectWallet,
+    disconnectWallet,
+  } = useBlockchain();
 
   let content;
+
   if (loading) {
-    content = <p id='loader' role="status" aria-live="polite" className='text-center' style={{ margin: '30px', color: 'white' }}><b>LOADING PLEASE...</b></p>;
+    content = (
+      <p
+        id="loader"
+        role="status"
+        aria-live="polite"
+        className="text-center"
+        style={{
+          margin: "30px",
+          color: "white",
+        }}
+      >
+        <b>LOADING PLEASE...</b>
+      </p>
+    );
   } else {
     content = (
       <Main
@@ -27,23 +53,40 @@ function App() {
   }
 
   return (
-    <div className='App' style={{ position: 'relative' }}>
+    <div
+      className="App"
+      style={{ position: "relative" }}
+    >
       <LoadingOverlay
         show={transactionLoading}
         message={transactionStatus}
       />
-      <div style={{ position: 'absolute' }}>
-      </div>
-      <Navbar account={account} />
-      <div className='container-fluid mt-5'>
-        <div className='row'>
-          <main role='main' className='col-lg-12 ml-auto mr-auto' style={{ maxWidth: '1100px', minHeight: '100vh' }}>
+
+      <div
+        style={{
+          position: "absolute",
+        }}
+      ></div>
+
+      <Navbar
+        account={account}
+        onConnect={connectWallet}
+        onDisconnect={disconnectWallet}
+      />
+
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            role="main"
+            className="app-main"
+          >
             <div>
               {content}
             </div>
           </main>
         </div>
       </div>
+
       <ToastContainer
         position="top-right"
         autoClose={3000}

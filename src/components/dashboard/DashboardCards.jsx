@@ -8,7 +8,7 @@ const DashboardCards = ({
   rwdBalance,
 }) => {
   return (
-    <div className="row g-4">
+    <div className="row dashboard-cards-row">
 
       <div className="col-lg-4 col-md-6 d-flex">
         <StatCard
